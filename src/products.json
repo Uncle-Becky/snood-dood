@@ -1,0 +1,35 @@
+{
+    "$schema": "https://developers.reddit.com/schema/products.json",
+    "products": [
+      {
+        "sku": "sword_001",
+        "displayName": "Wooden Sword",
+        "description": "A practice sword (damage:1)",
+        "price": 25,
+        "metadata": {
+          "category": "weapon"
+        },
+        "accountingType": "DURABLE"
+      },
+      {
+        "sku": "sword_002",
+        "displayName": "Bronze Sword",
+        "description": "A beginner's sword (damage:5)",
+        "price": 50,
+        "metadata": {
+          "category": "weapon"
+        },
+        "accountingType": "DURABLE"
+      },
+      {
+        "sku": "sword_003",
+        "displayName": "The One Sword",
+        "description": "The ultimate sword that seals all evil (damage: 999)",
+        "price": 1000,
+        "metadata": {
+          "category": "weapon"
+        },
+        "accountingType": "DURABLE"
+      }
+    ]
+  }
