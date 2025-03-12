@@ -11,5 +11,5 @@ export type Order = {
     productSku: string;
     productName: string;
     purchaseDate: string;
-    status:string;
+    status: string;
 }

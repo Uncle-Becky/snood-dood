@@ -1,46 +1,38 @@
 import { DrawingTool } from './drawingTools';
 
-export interface CollaborationSession {
-    id: string;
-    createdAt: number;
-    participants: Participant[];
-    isActive: boolean;
-}
-
-export interface Participant {
+export type Participant = {
     id: string;
     username: string;
     isHost: boolean;
     joinedAt: number;
     isVideoEnabled: boolean;
     isAudioEnabled: boolean;
-}
+};
 
-export interface DrawingEvent {
-    type: 'stroke' | 'clear' | 'undo' | 'redo';
+export type CollaborationSession = {
+    id: string;
+    createdAt: number;
+    participants: Participant[];
+    isActive: boolean;
+};
+
+export type DrawingEvent = {
+    type: 'stroke';
     sessionId: string;
     userId: string;
     timestamp: number;
-    data: StrokeData | null;
-}
+    data: {
+        points: { x: number; y: number; pressure: number }[];
+        tool: { type: string };
+        color: string;
+        width: number;
+    };
+};
 
-export interface StrokeData {
-    points: Point[];
-    tool: DrawingTool;
-    color: string;
-    width: number;
-}
-
-export interface Point {
-    x: number;
-    y: number;
-    pressure?: number;
-}
-
-export interface CollaborationMessage {
-    type: 'session_start' | 'session_end' | 'participant_join' | 'participant_leave' | 'drawing_event';
+export type CollaborationMessage = {
+    type: string;
     sessionId: string;
     senderId: string;
     timestamp: number;
-    payload: CollaborationSession | Participant | DrawingEvent;
-}
+    payload: any; // Consider more specific types based on message type
+};

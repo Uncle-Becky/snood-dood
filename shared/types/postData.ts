@@ -1,4 +1,4 @@
 export type PostData = {
-  poemTitle:string
+  poemTitle: string;
   poemBody: string;
 };

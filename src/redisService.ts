@@ -10,11 +10,11 @@ Devvit.configure({
 
 export type RedisService = {
     // Post
-    getPostData: (postId:string) => Promise<PostData>;
+    getPostData: (postId:string) => Promise< PostData | null >;
     savePostData: (postId:string, postData: PostData) => Promise<void>;
 
     // User
-    getUserData: (userId:string) => Promise<GameUserData>;
+    getUserData: (userId:string) => Promise< GameUserData | null >;
     saveUserData: (userId:string, userData: GameUserData) => Promise<void>;
 
     // Leaderboard

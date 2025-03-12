@@ -1,10 +1,7 @@
 export type DrawingTool = {
-    type: 'pen' | 'brush' | 'eraser' | 'shape';
-    shapeType?: 'rectangle' | 'circle' | 'line' | 'arrow';
-    options?: {
-        opacity?: number;
-        smoothing?: number;
-    };
+    type: string;
+    color?: string;
+    width?: number;
 };
 
 export const DEFAULT_DRAWING_TOOLS: Record<string, DrawingTool> = {

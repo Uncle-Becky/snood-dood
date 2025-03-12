@@ -1,2 +1,6 @@
-name: devvit-backend-2
-version: 0.0.9.3
+name: snoodle
+version: 0.0.1
+deployments:
+  default:
+    runtime: latest
+    entrypoint: src/main.tsx

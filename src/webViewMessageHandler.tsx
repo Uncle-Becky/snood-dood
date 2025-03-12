@@ -6,10 +6,16 @@ import { Product as DevvitProduct, Order as DevvitOrder, OnPurchaseResult, Order
 import { PaymentsContext } from "./paymentsContext.js";
 import { getNewRandomPoem } from "../data/poems.js";
 import { createNewPost as createNewPostUtil } from "../shared/utils/createNewPost.js";
+import { createLiveKitService } from "./livekitService.js";
+import { createCollaborationService } from "./collaborationService.js";
 
 async function fetchPostData(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context) {
     const redisService = createRedisService(context);
-    const postData = await redisService.getPostData(context.postId!);
+    if (!context.postId) {
+        console.error("postId is undefined!");
+        return;
+    }
+    const postData = await redisService.getPostData(context.postId);
     webView.postMessage({
       type: 'fetchPostDataReponse',
       data: {
@@ -32,7 +38,7 @@ async function setUserScore(message: WebViewMessage, webView: UseWebViewResult<D
                 status: 'success'
             },
         });
-    }    
+    }
 }
 
 async function fetchLeaderboard(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context) {
@@ -92,7 +98,7 @@ export async function fetchAvailableProducts(webView: UseWebViewResult<DevvitMes
             imageUrl: product.images?.icon ?? '',
         } as Product;
     });
-    
+
     webView.postMessage({
         type: 'fetchAvailableProductsResponse',
         data: {
@@ -130,7 +136,7 @@ export async function buyProductResponse(result:OnPurchaseResult, webView: UseWe
         },
     }
     webView.postMessage(responseMessage);
-    
+
     // Show a toast message
     context.ui.showToast(result.status === OrderResultStatus.Success ? 'Purchase successful!' : 'Purchase failed');
 }
@@ -160,6 +166,58 @@ async function createNewPost(message: WebViewMessage, webView: UseWebViewResult<
     // Feel free to delete this method implementation and create your own.
     const postData = await getNewRandomPoem();
     await createNewPostUtil(postData.poemTitle, postData, context);
+}
+
+async function getLiveKitToken(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context) {
+    if (message.type === 'getLiveKitToken') {
+        console.log('Devvit', 'Received getLiveKitToken request:', message.data);
+        const liveKitService = createLiveKitService(context);
+        const token = await liveKitService.generateToken(message.data.sessionId, message.data.participant);
+        webView.postMessage({
+            type: 'getLiveKitToken',
+            data: { token },
+        });
+        console.log('Devvit', 'Sent LiveKit token to web view');
+    }
+}
+
+async function createSession(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context){
+    if (message.type === 'createSession') {
+        console.log('Devvit', 'Received create session request', message.data);
+        const collaborationService = createCollaborationService(context);
+        const session = await collaborationService.createSession(message.data.hostId, message.data.hostUsername);
+        webView.postMessage({
+            type: 'createSession',
+            data: { session },
+        });
+        console.log('Devvit', 'Sent create session response', session);
+    }
+}
+
+async function joinSession(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context) {
+     if (message.type === 'joinSession') {
+        console.log('Devvit', 'Received join session request', message.data);
+        const collaborationService = createCollaborationService(context);
+        const session = await collaborationService.joinSession(message.data.sessionId, message.data.userId, message.data.username);
+        webView.postMessage({
+            type: 'joinSession',
+            data: { session },
+        });
+        console.log('Devvit', 'Sent join session response', session);
+    }
+}
+
+async function endSession(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context) {
+    if (message.type === 'endSession') {
+        console.log('Devvit', 'Received end session request', message.data);
+        const collaborationService = createCollaborationService(context);
+        await collaborationService.endSession(message.data.sessionId);
+        webView.postMessage({
+            type: 'endSession',
+            data: {  },
+        });
+        console.log('Devvit', 'Sent end session response');
+    }
 }
 
 export async function handleWebViewMessages(message: WebViewMessage, webView: UseWebViewResult<DevvitMessage>, context: Devvit.Context, paymentsContext:PaymentsContext) {
@@ -194,7 +252,23 @@ export async function handleWebViewMessages(message: WebViewMessage, webView: Us
         case 'buyProduct':
             paymentsContext.payments.purchase(message.data.sku);
             break;
+        case 'drawingEvent':
+            console.log('Devvit', 'Received drawing event:', message.data);
+            break;
+        case 'getLiveKitToken':
+            await getLiveKitToken(message, webView, context);
+            break;
+        case 'createSession':
+            await createSession(message, webView, context);
+            break;
+        case 'joinSession':
+            await joinSession(message, webView, context);
+            break;
+        case 'endSession':
+            await endSession(message, webView, context);
+            break;
         default:
-          throw new Error(`Unknown message type: ${message satisfies never}`);
+          const _exhaustiveCheck: never = message;
+          return _exhaustiveCheck;
       }
 }
