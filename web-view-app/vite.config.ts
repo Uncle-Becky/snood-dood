@@ -23,7 +23,7 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, "index.html"),
+        game: path.resolve(__dirname, "index.html"),
       },
     },
   },
