@@ -144,7 +144,7 @@ export const CollaborationPage: React.FC<CollaborationPageProps> = ({ client }) 
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-4">
+      <main className="flex-1 p-4"></main>
     </div>
   );
 };
