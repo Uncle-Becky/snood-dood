@@ -13,6 +13,7 @@
   "dependencies": {
     "@livekit/components-react": "^2.8.1",
     "@livekit/components-styles": "^1.1.4",
+    "@tailwindcss/postcss": "^4.3.3",
     "@tldraw/tldraw": "^3.11.0",
     "livekit-client": "^2.9.8",
     "lucide-react": "^0.483.0",
@@ -25,8 +26,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
-
- "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.23.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
@@ -35,6 +35,6 @@
     "tailwindcss": "^4.0.15",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.28.0",
-    "vite": "6.3.4"
+    "vite": "^6.4.3"
   }
 }
