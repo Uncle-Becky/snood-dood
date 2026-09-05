@@ -14,7 +14,7 @@
     "@livekit/components-react": "^2.8.1",
     "@livekit/components-styles": "^1.1.4",
     "@tailwindcss/postcss": "^4.3.3",
-    "@tldraw/tldraw": "^3.11.0",
+    "@tldraw/tldraw": "^5.4.0",
     "livekit-client": "^2.9.8",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
